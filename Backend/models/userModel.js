@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import validator from "validator";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 const userSchema = new mongoose.Schema(
   {
@@ -23,10 +26,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       trim: true,
-      validate: {
-        validator: (value) => validator.isEmail(value),
-        message: "Please enter a valid email address",
-      },
+      validate: [validator.isEmail, "Please enter a valid email address"],
     },
     password: {
       type: String,
@@ -54,6 +54,34 @@ const userSchema = new mongoose.Schema(
     validateBeforeSave: true,
   }
 );
+
+// Hashes password before saving to the database
+userSchema.pre("save", async function (next) {
+  // If password is not modified then do not hash it
+  if (!this.isModified("password")) return next();
+
+  this.password = await bcrypt.hash(this.password, 10);
+});
+
+userSchema.methods = {
+  // Compare raw password with hashed password stored in DB
+  comparePassword: async function (plainTextPassword) {
+    return await bcrypt.compare(plainTextPassword, this.password);
+  },
+
+  // Generate JWT with user ID as payload
+  generateJWTToken: async function () {
+    return await jwt.sign(
+      {
+        id: this._id,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: process.env.JWT_EXPIRY,
+      }
+    );
+  },
+};
 
 const User = mongoose.model("User", userSchema);
 
