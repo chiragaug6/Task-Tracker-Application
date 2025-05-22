@@ -1,0 +1,21 @@
+{
+  "name": "task-tracker-backend",
+  "version": "1.0.0",
+  "description": "This is the backend for the Task Tracker Application built using the MERN stack.",
+  "keywords": [
+    "nodejs",
+    "express",
+    "mongodb"
+  ],
+  "license": "ISC",
+  "author": "chirag solanki",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
+  }
+}
