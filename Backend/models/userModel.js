@@ -73,7 +73,7 @@ userSchema.methods = {
   generateJWTToken: async function () {
     return await jwt.sign(
       {
-        id: this._id,
+        userId: this._id,
       },
       process.env.JWT_SECRET,
       {
