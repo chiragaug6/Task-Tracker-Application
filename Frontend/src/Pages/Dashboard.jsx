@@ -8,6 +8,7 @@ import PaginationControls from "../Components/PaginationControls.jsx";
 import { useNavigate } from "react-router-dom";
 import { openModal } from "../Redux/Slices/taskSlice.js";
 import Badge from "../Components/Badge.jsx";
+import ShimmerTable from "../Components/ShimmerTable.jsx";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -54,7 +55,7 @@ const Dashboard = () => {
 
         {/* Conditional Rendering: Loading, Empty, or Tasks Table */}
         {loading ? (
-          <div className="text-center py-10">Loading tasks...</div>
+          <ShimmerTable />
         ) : tasks?.length === 0 ? (
           <div className="text-center py-10">No tasks found.</div>
         ) : (
