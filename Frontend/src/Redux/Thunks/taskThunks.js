@@ -5,7 +5,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 // CREATE Task
 export const createTask = createAsyncThunk("task/create", async (taskData) => {
   try {
-    toast.info("Creating task...");
     const res = await axiosInstance.post("/tasks", taskData);
     toast.success(res?.data?.message || "Task created successfully!");
     return res?.data?.data;
@@ -34,7 +33,6 @@ export const updateTask = createAsyncThunk(
   "task/update",
   async ({ id, updateData }) => {
     try {
-      toast.info("Updating task...");
       const res = await axiosInstance.patch(`/tasks/${id}`, updateData);
       toast.success(res?.data?.message || "Task updated successfully!");
       return res?.data?.data;
@@ -48,7 +46,6 @@ export const updateTask = createAsyncThunk(
 // DELETE Task
 export const deleteTask = createAsyncThunk("task/delete", async (id) => {
   try {
-    toast.info("Deleting task...");
     await axiosInstance.delete(`/tasks/${id}`);
     toast.success("Task deleted successfully!");
     return id;

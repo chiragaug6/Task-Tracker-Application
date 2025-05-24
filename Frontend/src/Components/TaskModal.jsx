@@ -23,6 +23,7 @@ export default function TaskModal() {
 
   // State to hold validation error messages
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   // When editMode or currentTask changes, set the form data accordingly
   useEffect(() => {
@@ -61,6 +62,7 @@ export default function TaskModal() {
     }
 
     setErrors({}); // Clear previous errors
+    setIsLoading(true);
 
     if (editMode) {
       // Update existing task
@@ -69,6 +71,7 @@ export default function TaskModal() {
       // Create new task
       dispatch(createTask(formData));
     }
+    setIsLoading(false);
   };
 
   // Don't render modal if not open
@@ -154,6 +157,7 @@ export default function TaskModal() {
           <button
             className="btn btn-outline hover:scale-105 transition"
             onClick={() => dispatch(closeModal())}
+            disabled={isLoading}
           >
             Cancel
           </button>
@@ -161,7 +165,13 @@ export default function TaskModal() {
             className="btn btn-primary hover:scale-105 transition"
             onClick={handleSave}
           >
-            {editMode ? "Update" : "Create"}
+            {isLoading
+              ? editMode
+                ? "Updating..."
+                : "Creating..."
+              : editMode
+              ? "Update"
+              : "Create"}
           </button>
         </div>
       </div>

@@ -5,7 +5,6 @@ import axiosInstance from "../../utils/axiosInstance.js";
 // Thunk for user registration
 export const register = createAsyncThunk("/user/signup", async (data) => {
   try {
-    toast.info("Please wait! Creating your account...");
     const res = await axiosInstance.post("/user/register", data);
     toast.success(res?.data?.message || "Account created successfully!");
     return res?.data;
@@ -18,7 +17,7 @@ export const register = createAsyncThunk("/user/signup", async (data) => {
 // Thunk for user login
 export const login = createAsyncThunk("/user/login", async (data) => {
   try {
-    toast.info("Please wait! Authentication in progress...");
+    // toast.info("Please wait! Authentication in progress...");
     const res = await axiosInstance.post("/user/login", data);
     toast.success(res?.data?.message || "Login successful!");
     return res?.data;
@@ -31,7 +30,6 @@ export const login = createAsyncThunk("/user/login", async (data) => {
 // Thunk for user logout
 export const logout = createAsyncThunk("/user/logout", async () => {
   try {
-    toast.info("Logging you out...");
     const res = await axiosInstance.get("/user/logout");
     toast.success(res?.data?.message || "Logged out successfully!");
     return res?.data;

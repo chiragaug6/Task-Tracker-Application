@@ -19,6 +19,7 @@ const Register = () => {
 
   // Error state
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Handle input change
   const handleChange = (e) => {
@@ -37,13 +38,14 @@ const Register = () => {
       return;
     }
 
+    setIsSubmitting(true); 
+
     const response = await dispatch(register(formData));
 
+    setIsSubmitting(false);
+
     if (response?.payload?.success) {
-      toast.success("Registered successfully!");
       navigate("/");
-    } else {
-      toast.error(response?.payload?.message || "Registration failed");
     }
 
     // Reset form
@@ -88,7 +90,7 @@ const Register = () => {
             type="submit"
             className="btn btn-primary w-full text-lg font-semibold hover:btn-secondary transition duration-300"
           >
-            Register
+            {isSubmitting ? "Registering..." : "Register"}
           </button>
         </form>
 
