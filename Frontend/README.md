@@ -1,12 +1,66 @@
-# React + Vite
+# 🚀 Task Tracker - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the **frontend** of the **Task Tracker Application**, built with **React**, **Redux Toolkit**, **Tailwind CSS**, and **DaisyUI**. It allows users to manage tasks seamlessly with authentication and pagination support.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌐 Live Demo
 
-## Expanding the ESLint configuration
+👉 [https://task-tracker-delta-tawny.vercel.app](https://task-tracker-delta-tawny.vercel.app)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## ✨ Features
+
+- 🔐 User Authentication (Register, Login, Logout)
+- ✅ Task CRUD (Create, Read, Update, Delete)
+- 📄 Pagination on task listing
+- 🧠 Centralized state with Redux Toolkit
+- 🌈 UI components via Tailwind CSS & DaisyUI
+- 🧼 Input validation using `validator`
+- 🍞 Toast alerts with `react-hot-toast`
+- 🔒 Auth via JWT + HTTP-only cookies
+- 📡 API communication using Axios
+
+---
+
+## 🧱 Tech Stack
+
+- **React 19**
+- **Redux Toolkit**
+- **React Router DOM**
+- **Tailwind CSS 4**
+- **DaisyUI**
+- **Axios**
+- **React Hot Toast**
+- **Validator**
+- **Vite**
+
+---
+
+## ⚙️ Project Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/Task-Tracker-Application.git
+cd Task-Tracker-Application/frontend
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Run development server
+
+```bash
+npm run dev
+```
+
+### 4. Build for production
+
+```bash
+npm run build
+```
