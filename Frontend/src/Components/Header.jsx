@@ -23,7 +23,7 @@ const Header = () => {
             to="/"
             className="text-2xl font-extrabold text-primary hover:text-primary-focus transition"
           >
-            📝 Task Manager
+            📝 Task Tracker
           </Link>
 
           {/* Navigation Buttons */}

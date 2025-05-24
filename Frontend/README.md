@@ -18,7 +18,7 @@ This is the **frontend** of the **Task Tracker Application**, built with **React
 - 🧠 Centralized state with Redux Toolkit
 - 🌈 UI components via Tailwind CSS & DaisyUI
 - 🧼 Input validation using `validator`
-- 🍞 Toast alerts with `react-hot-toast`
+- 🍞 Toast alerts with `react-toastify`
 - 🔒 Auth via JWT + HTTP-only cookies
 - 📡 API communication using Axios
 
