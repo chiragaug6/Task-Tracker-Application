@@ -3,6 +3,11 @@ import taskModel from "../models/taskModel.js";
 import AppError from "../utils/error.js";
 import { validateTaskData } from "../utils/validateAndSanitize.js";
 
+/**
+ * @desc    Get all tasks for a logged-in user (with pagination)
+ * @route   GET /api/v1/tasks
+ * @access  Private
+ */
 const getAllTasks = async (req, res, next) => {
   try {
     const userId = req.userId;
@@ -11,13 +16,26 @@ const getAllTasks = async (req, res, next) => {
       return next(new AppError("Unauthorized: User not authenticated", 401));
     }
 
-    // Fetch all tasks belonging to the user
+    // Extract pagination params
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    // Get total count for pagination
+    const totalTasks = await taskModel.countDocuments({ userId });
+
+    // Fetch paginated tasks
     const tasks = await taskModel
       .find({ userId })
-      .select("title status priority dueDate createdAt updatedAt");
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
+      totalTasks,
+      currentPage: page,
+      totalPages: Math.ceil(totalTasks / limit),
       count: tasks.length,
       data: tasks,
     });
@@ -26,6 +44,11 @@ const getAllTasks = async (req, res, next) => {
   }
 };
 
+/**
+ * @desc    Create a new task for the logged-in user
+ * @route   POST /api/v1/tasks
+ * @access  Private
+ */
 const createTask = async (req, res, next) => {
   try {
     // Validate request body
@@ -44,20 +67,18 @@ const createTask = async (req, res, next) => {
     res.status(201).json({
       success: true,
       message: "Task created successfully",
-      data: {
-        id: task._id,
-        title: task.title,
-        status: task.status,
-        priority: task.priority,
-        dueDate: task.dueDate,
-        createdAt: task.createdAt,
-      },
+      data: task,
     });
   } catch (err) {
     next(err); // Pass to error handler middleware
   }
 };
 
+/**
+ * @desc    Update a specific task by ID for the logged-in user
+ * @route   PATCH /api/v1/tasks/:taskId
+ * @access  Private
+ */
 const updateTask = async (req, res, next) => {
   try {
     // Extract taskId from params and userId from auth middleware
@@ -92,20 +113,18 @@ const updateTask = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Task updated successfully",
-      data: {
-        id: task._id,
-        title: task.title,
-        status: task.status,
-        priority: task.priority,
-        dueDate: task.dueDate,
-        updatedAt: task.updatedAt,
-      },
+      data: task,
     });
   } catch (err) {
     next(err);
   }
 };
 
+/**
+ * @desc    Delete a specific task by ID for the logged-in user
+ * @route   DELETE /api/v1/tasks/:taskId
+ * @access  Private
+ */
 const deleteTask = async (req, res, next) => {
   try {
     const { taskId } = req.params;

@@ -29,7 +29,7 @@ const register = async (req, res, next) => {
     res.status(201).json({
       success: true,
       message: "User registered successfully",
-      user,
+      data: user,
     });
   } catch (err) {
     // Forward errors to the global error handler
@@ -76,7 +76,7 @@ const login = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "User logged in successfully",
-      user,
+      data: user,
     });
   } catch (err) {
     next(err);
@@ -85,7 +85,7 @@ const login = async (req, res, next) => {
 
 /**
  * @desc    Log out user by clearing the cookie
- * @route   POST /api/v1/user/logout
+ * @route   GET /api/v1/user/logout
  * @access  Public
  */
 const logout = (req, res) => {

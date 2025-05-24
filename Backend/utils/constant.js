@@ -4,3 +4,9 @@ export const cookieOptions = {
   secure: true, // HTTPS only
   sameSite: "none", // cross-site allowed
 };
+
+// Enable CORS with specific origin and credentials
+export const corsOptions = {
+  origin: process.env.FRONTEND_URL || "http://localhost:5173", // Replace with your actual frontend origin
+  credentials: true,
+};
