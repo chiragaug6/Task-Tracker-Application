@@ -4,7 +4,7 @@ import { register } from "../Redux/Thunks/authThunks";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { validateRegisterForm } from "../utils/formValidators.js";
-import FormField from "../components/FormField";
+import FormField from "../Components/FormField";
 
 const Register = () => {
   const dispatch = useDispatch();
