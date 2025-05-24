@@ -30,7 +30,9 @@ export default function TaskModal() {
       // Populate form fields with current task data for editing
       setFormData({
         ...currentTask,
-        dueDate: new Date(currentTask.dueDate).toISOString().split("T")[0], // format date for input[type=date]
+        dueDate: currentTask.dueDate
+          ? new Date(currentTask.dueDate).toISOString().split("T")[0]
+          : null,
       });
     } else {
       // Reset form fields for creating a new task
@@ -39,7 +41,7 @@ export default function TaskModal() {
         description: "",
         status: "Incomplete",
         priority: "Medium",
-        dueDate: "",
+        dueDate: null,
       });
     }
   }, [editMode, currentTask]);
@@ -52,7 +54,13 @@ export default function TaskModal() {
 
   // Save button handler - validate and dispatch appropriate action
   const handleSave = () => {
-    if (!validateTaskForm(formData)) return; // Validate form, return early if invalid
+    const validationErrors = validateTaskForm(formData);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setErrors({}); // Clear previous errors
 
     if (editMode) {
       // Update existing task

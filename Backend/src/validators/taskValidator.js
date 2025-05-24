@@ -29,7 +29,7 @@ export const taskValidationSchema = Joi.object({
 
   priority: Joi.string().valid("Low", "Medium", "High").default("Medium"),
 
-  dueDate: Joi.date().greater("now").optional().messages({
+  dueDate: Joi.date().greater("now").optional().allow(null).messages({
     "date.greater": "Due date must be in the future.",
     "date.base": "Due date must be a valid date.",
   }),

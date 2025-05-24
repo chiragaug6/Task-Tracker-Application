@@ -88,12 +88,12 @@ export const validateTaskForm = (formData) => {
 
   // Description: optional, max 1000, ASCII only
   const description = formData.description?.trim();
-  if (!description) {
-    errors.description = "Description is required.";
-  } else if (description.length > 1000) {
-    errors.description = "Description must not exceed 1000 characters.";
-  } else if (!/^[\x00-\x7F]*$/.test(description)) {
-    errors.description = "Description contains invalid characters.";
+  if (description) {
+    if (description.length > 1000) {
+      errors.description = "Description must not exceed 1000 characters.";
+    } else if (!/^[\x00-\x7F]*$/.test(description)) {
+      errors.description = "Description contains invalid characters.";
+    }
   }
 
   // Due Date: must be in future (if provided)
