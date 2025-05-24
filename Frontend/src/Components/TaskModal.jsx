@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createTask, updateTask } from "../Redux/Thunks/taskThunks.js";
 import { closeModal } from "../Redux/Slices/taskSlice.js";
 import { validateTaskForm } from "../utils/formValidators.js";
+import ConfirmModal from "./ConfirmModal.jsx";
 
 export default function TaskModal() {
   const dispatch = useDispatch();
@@ -63,6 +64,8 @@ export default function TaskModal() {
 
     setErrors({}); // Clear previous errors
     setIsLoading(true);
+    console.log(isLoading);
+    console.log("before isloading in model");
 
     if (editMode) {
       // Update existing task
@@ -78,42 +81,44 @@ export default function TaskModal() {
   if (!modalOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
-      <div className="bg-base-100 text-base-content rounded-2xl p-6 w-full max-w-md shadow-2xl transition-all duration-300 dark:bg-neutral dark:text-neutral-content">
-        <h2 className="text-2xl font-bold mb-4">
-          {editMode ? "Edit Task" : "Add New Task"}
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50">
+      <div className="bg-base-100 dark:bg-neutral text-base-content dark:text-neutral-content rounded-2xl p-6 w-[90%] max-w-md shadow-2xl transition-all duration-300 animate-fade-in-up">
+        <h2 className="text-xl font-bold text-center mb-4">
+          {editMode ? "✏️ Edit Task" : "📝 Add New Task"}
         </h2>
+
         <div className="space-y-4">
           {/* Title input */}
           <div>
             <input
               type="text"
               name="title"
-              placeholder="Title"
-              className="input input-bordered w-full"
+              placeholder="Task title..."
+              className="input input-bordered w-full input-md rounded-lg"
               value={formData.title}
               onChange={handleChange}
             />
             {errors.title && (
-              <p className="text-error text-sm mt-1">{errors.title}</p>
+              <p className="text-error text-xs mt-1">{errors.title}</p>
             )}
           </div>
 
-          {/* Description textarea */}
+          {/* Description input */}
           <div>
             <textarea
               name="description"
-              placeholder="Description"
-              className="textarea textarea-bordered w-full"
+              placeholder="Describe the task..."
+              className="textarea textarea-bordered w-full textarea-md rounded-lg"
               value={formData.description}
               onChange={handleChange}
+              rows={3}
             />
             {errors.description && (
-              <p className="text-error text-sm mt-1">{errors.description}</p>
+              <p className="text-error text-xs mt-1">{errors.description}</p>
             )}
           </div>
 
-          {/* Status and Priority selectors */}
+          {/* Status and Priority */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <select
               name="status"
@@ -121,8 +126,8 @@ export default function TaskModal() {
               value={formData.status}
               onChange={handleChange}
             >
-              <option value="Incomplete">Incomplete</option>
-              <option value="Completed">Completed</option>
+              <option value="Incomplete">⏳ Incomplete</option>
+              <option value="Completed">✅ Completed</option>
             </select>
 
             <select
@@ -131,9 +136,9 @@ export default function TaskModal() {
               value={formData.priority}
               onChange={handleChange}
             >
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
+              <option value="Low">🟢 Low</option>
+              <option value="Medium">🟠 Medium</option>
+              <option value="High">🔴 High</option>
             </select>
           </div>
 
@@ -142,12 +147,12 @@ export default function TaskModal() {
             <input
               type="date"
               name="dueDate"
-              className="input input-bordered w-full"
+              className="input input-bordered w-full rounded-lg"
               value={formData.dueDate}
               onChange={handleChange}
             />
             {errors.dueDate && (
-              <p className="text-error text-sm mt-1">{errors.dueDate}</p>
+              <p className="text-error text-xs mt-1">{errors.dueDate}</p>
             )}
           </div>
         </div>
@@ -155,14 +160,16 @@ export default function TaskModal() {
         {/* Action buttons */}
         <div className="mt-6 flex justify-end gap-2">
           <button
-            className="btn btn-outline hover:scale-105 transition"
+            className="btn btn-outline btn-sm sm:btn-md rounded-full hover:scale-105 transition-all"
             onClick={() => dispatch(closeModal())}
             disabled={isLoading}
           >
-            Cancel
+            ❌ Cancel
           </button>
           <button
-            className="btn btn-primary hover:scale-105 transition"
+            className={`btn btn-primary btn-sm sm:btn-md rounded-full text-white hover:scale-105 transition-all ${
+              isLoading ? "btn-disabled" : ""
+            }`}
             onClick={handleSave}
           >
             {isLoading
@@ -170,8 +177,8 @@ export default function TaskModal() {
                 ? "Updating..."
                 : "Creating..."
               : editMode
-              ? "Update"
-              : "Create"}
+              ? "✅ Update"
+              : "🚀 Create"}
           </button>
         </div>
       </div>

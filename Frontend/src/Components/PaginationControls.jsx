@@ -13,7 +13,7 @@ const PaginationControls = ({ totalPages, currentPage, setCurrentPage }) => {
           <button
             key={index} // Unique key for each button
             onClick={() => setCurrentPage(pageNumber)} // Set the current page when clicked
-            className={`px-4 py-2 rounded-2xl transition-all duration-200 text-sm font-medium shadow-sm border
+            className={`px-4 cursor-pointer py-2 rounded-2xl transition-all duration-200 text-sm font-medium shadow-sm border
               ${
                 isActive
                   ? // Styles for active (selected) page button
