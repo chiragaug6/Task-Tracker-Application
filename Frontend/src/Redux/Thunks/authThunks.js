@@ -22,7 +22,9 @@ export const login = createAsyncThunk("/user/login", async (data) => {
     toast.success(res?.data?.message || "Login successful!");
     return res?.data;
   } catch (error) {
-    toast.error(error?.response?.data?.message || "Login failed!");
+    toast.error(
+      error?.response?.data?.message || error?.response?.data || "Login failed!"
+    );
     throw error;
   }
 });
