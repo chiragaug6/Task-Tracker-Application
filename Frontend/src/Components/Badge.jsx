@@ -5,9 +5,9 @@ const getStatusBadgeClass = (status) => {
     case "Completed":
       return "badge-success";
     case "Incomplete":
-      return "badge-warning";
-    default:
       return "badge-error";
+    default:
+      return "badge-warning";
   }
 };
 
@@ -30,7 +30,7 @@ const Badge = ({ label, type }) => {
       ? getStatusBadgeClass(label)
       : getPriorityBadgeClass(label);
 
-  return <span className={`badge ${badgeClass}`}>{label}</span>;
+  return <span className={`badge badge-soft ${badgeClass}`}>{label}</span>;
 };
 
 export default Badge;

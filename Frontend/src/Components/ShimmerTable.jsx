@@ -7,6 +7,7 @@ const ShimmerTable = () => {
         <thead className="bg-base-200 text-base-content">
           <tr>
             <th>Title</th>
+            <th>Creation Date</th>
             <th>Status</th>
             <th>Priority</th>
             <th className="text-center">Actions</th>
@@ -15,6 +16,9 @@ const ShimmerTable = () => {
         <tbody>
           {Array.from({ length: 6 }).map((_, index) => (
             <tr key={index} className="hover:bg-base-200 transition-all">
+              <td>
+                <div className="h-4 w-32 bg-base-300 rounded"></div>
+              </td>
               <td>
                 <div className="h-4 w-32 bg-base-300 rounded"></div>
               </td>

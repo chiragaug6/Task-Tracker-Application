@@ -130,8 +130,8 @@ export default function TaskModal() {
               value={formData.status}
               onChange={handleChange}
             >
-              <option value="Incomplete">⏳ Incomplete</option>
               <option value="Completed">✅ Completed</option>
+              <option value="Incomplete">❌ Incomplete</option>
             </select>
 
             <select
@@ -140,9 +140,9 @@ export default function TaskModal() {
               value={formData.priority}
               onChange={handleChange}
             >
-              <option value="Low">🟢 Low</option>
-              <option value="Medium">🟠 Medium</option>
               <option value="High">🔴 High</option>
+              <option value="Medium">🟡 Medium</option>
+              <option value="Low">🔵 Low</option>
             </select>
           </div>
 

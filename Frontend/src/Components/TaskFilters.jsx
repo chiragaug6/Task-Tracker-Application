@@ -50,9 +50,9 @@ const TaskFilters = () => {
         onChange={(e) => dispatch(setPriority(e.target.value))}
       >
         <option value="">All Priorities</option>
-        <option value="High">🔥 High</option>
-        <option value="Medium">⚡ Medium</option>
-        <option value="Low">🌱 Low</option>
+        <option value="High">🔴 High</option>
+        <option value="Medium">🟡 Medium</option>
+        <option value="Low">🔵 Low</option>
       </select>
 
       {/* Sort Filter */}
