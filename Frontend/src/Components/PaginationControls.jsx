@@ -1,55 +1,55 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setPage } from "../Redux/Slices/filterSlice";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
-const PaginationControls = ({ currentPage, setCurrentPage }) => {
+const PaginationControls = () => {
+  const dispatch = useDispatch();
   const { totalPages } = useSelector((state) => state.task);
+  const { page } = useSelector((state) => state.filter);
 
-  const handlePrevClick = () => {
-    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+  if (totalPages <= 1) return null;
+
+  const handlePrev = () => {
+    if (page > 1) dispatch(setPage(page - 1));
   };
 
-  const handleNextClick = () => {
-    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
+  const handleNext = () => {
+    if (page < totalPages) dispatch(setPage(page + 1));
   };
 
   return (
     <div className="flex justify-center items-center flex-wrap gap-2 mt-6 px-4">
-      {/* Prev Button */}
-      {currentPage > 1 && (
+      {page > 1 && (
         <button
-          onClick={handlePrevClick}
+          onClick={handlePrev}
           className="btn btn-sm btn-outline flex items-center gap-2"
         >
-          <FaArrowLeft /> Prev
+          <FaArrowLeft />
         </button>
       )}
 
-      {/* Page Number Buttons */}
-      {[...Array(totalPages)].map((_, index) => {
-        const pageNumber = index + 1;
-        const isActive = currentPage === pageNumber;
-
+      {[...Array(totalPages)].map((_, idx) => {
+        const pageNum = idx + 1;
         return (
           <button
-            key={pageNumber}
-            onClick={() => setCurrentPage(pageNumber)}
-            className={`btn btn-sm transition-all ${
-              isActive ? "btn-primary" : "btn-outline"
+            key={pageNum}
+            onClick={() => dispatch(setPage(pageNum))}
+            className={`btn btn-sm ${
+              pageNum === page ? "btn-primary" : "btn-outline"
             }`}
           >
-            {pageNumber}
+            {pageNum}
           </button>
         );
       })}
 
-      {/* Next Button */}
-      {currentPage < totalPages && (
+      {page < totalPages && (
         <button
-          onClick={handleNextClick}
+          onClick={handleNext}
           className="btn btn-sm btn-outline flex items-center gap-2"
         >
-          Next <FaArrowRight />
+          <FaArrowRight />
         </button>
       )}
     </div>

@@ -1,58 +1,62 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllTasks, deleteTask } from "../Redux/Thunks/taskThunks.js";
-import { Pencil, Trash2 } from "lucide-react";
-import TaskModal from "../Components/TaskModal.jsx";
-import AppLayout from "../Layout/AppLayout.jsx";
-import PaginationControls from "../Components/PaginationControls.jsx";
-import { useNavigate } from "react-router-dom";
+import { getAllTasks, deleteTask } from "../Redux/Thunks/taskThunks";
 import { openModal } from "../Redux/Slices/taskSlice.js";
-import Badge from "../Components/Badge.jsx";
-import ShimmerTable from "../Components/ShimmerTable.jsx";
-import ConfirmModal from "../Components/ConfirmModal.jsx";
+
+import TaskFilters from "../Components/TaskFilters";
+import PaginationControls from "../Components/PaginationControls";
+import Badge from "../Components/Badge";
+import TaskModal from "../Components/TaskModal";
+import ConfirmModal from "../Components/ConfirmModal";
+import AppLayout from "../Layout/AppLayout";
+import ShimmerTable from "../Components/ShimmerTable";
+import { Pencil, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useDebounce } from "../CustomHooks/useDebounce.js";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { isLoggedIn } = useSelector((state) => state.auth);
   const { tasks, loading, modalOpen, totalPages } = useSelector(
     (state) => state.task
   );
-  const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
 
-  const [page, setPage] = useState(1);
+  const filters = useSelector((state) => state.filter);
+  const { page, limit, search, status, priority, sort } = filters;
+
+  const debouncedSearch = useDebounce(search, 500);
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState(null);
 
-  // useEffect checks auth and fetches tasks
   useEffect(() => {
     if (!isLoggedIn) {
-      navigate("/"); // redirect if not logged in
+      navigate("/");
       return;
     }
-    dispatch(getAllTasks({ page, limit: 6 }));
-  }, [isLoggedIn, page]);
-
-  const handleConfirmDelete = async () => {
-    if (!taskToDelete) return;
-
-    try {
-      dispatch(deleteTask(taskToDelete));
-      handleCancelDelete();
-    } catch (err) {
-      toast.error("Failed to delete task");
-    }
-  };
-
-  const handleCancelDelete = () => {
-    setShowConfirm(false);
-    setTaskToDelete(null);
-  };
+    dispatch(
+      getAllTasks({
+        page,
+        limit,
+        search: debouncedSearch,
+        status,
+        priority,
+        sort,
+      })
+    );
+  }, [dispatch, page, limit, debouncedSearch, status, priority, sort]);
 
   const handleDelete = (id) => {
     setTaskToDelete(id);
     setShowConfirm(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (taskToDelete) dispatch(deleteTask(taskToDelete));
+    setShowConfirm(false);
+    setTaskToDelete(null);
   };
 
   const handleEdit = (task) => dispatch(openModal({ editMode: true, task }));
@@ -60,63 +64,65 @@ const Dashboard = () => {
   return (
     <AppLayout>
       <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-          <h1 className="text-3xl font-extrabold text-primary-content">
-            Task Dashboard
-          </h1>
-          <button
-            onClick={() => dispatch(openModal({ editMode: false }))}
-            className="btn btn-primary rounded-xl px-6 py-2 shadow-md hover:shadow-lg transition-all"
-          >
-            + New Task
-          </button>
+        {/* Header: Filters + New Task Button */}
+        <div className="flex flex-col gap-4 mb-5">
+          <div className="flex flex-wrap items-center gap-4 justify-between mb-6">
+            {/* Filters + Reset */}
+            <div className="flex-grow min-w-0">
+              <TaskFilters />
+            </div>
+
+            {/* New Task Button */}
+            <div className="flex-shrink-0">
+              <button
+                onClick={() => dispatch(openModal({ editMode: false }))}
+                className="btn btn-primary rounded-xl whitespace-nowrap px-6 h-12"
+              >
+                + New Task
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* Table or ShimmerTable */}
+        {/* Table */}
         {loading ? (
           <ShimmerTable />
-        ) : tasks?.length === 0 ? (
-          <div className="text-center text-lg py-10 text-gray-500">
-            No tasks found.
-          </div>
+        ) : tasks.length === 0 ? (
+          <div className="text-center text-gray-500 py-10">No tasks found.</div>
         ) : (
           <div className="overflow-x-auto bg-base-100 rounded-2xl shadow-md">
-            <table className="table w-full ">
+            <table className="table w-full">
               <thead className="bg-base-200 text-base-content text-sm">
                 <tr>
-                  <th className="px-4 py-3">Title</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Priority</th>
-                  <th className="px-4 py-3 text-center">Actions</th>
+                  <th>Title</th>
+                  <th>Creation Date</th>
+                  <th>Status</th>
+                  <th>Priority</th>
+                  <th className="text-center">Actions</th>
                 </tr>
               </thead>
               <tbody className="text-sm">
                 {tasks.map((task) => (
-                  <tr
-                    key={task._id}
-                    className="hover:bg-base-200 transition-all duration-200"
-                  >
-                    <td className="px-4 py-3">{task.title}</td>
-                    <td className="px-4 py-3">
+                  <tr key={task._id}>
+                    <td>{task.title}</td>
+                    <td>{new Date(task.createdAt).toLocaleDateString()}</td>
+                    <td>
                       <Badge label={task.status} type="status" />
                     </td>
-                    <td className="px-4 py-3">
+                    <td>
                       <Badge label={task.priority} type="priority" />
                     </td>
-                    <td className="px-4 py-3">
+                    <td>
                       <div className="flex justify-center gap-2">
                         <button
-                          className="btn btn-sm btn-outline btn-primary rounded-lg"
                           onClick={() => handleEdit(task)}
-                          aria-label={`Edit task ${task.title}`}
+                          className="btn btn-sm btn-outline btn-primary"
                         >
                           <Pencil size={16} />
                         </button>
                         <button
-                          className="btn btn-sm btn-error text-white rounded-lg"
                           onClick={() => handleDelete(task._id)}
-                          aria-label={`Delete task ${task.title}`}
+                          className="btn btn-sm btn-error text-white"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -131,7 +137,7 @@ const Dashboard = () => {
 
         {/* Pagination */}
         <div className="mt-8 flex justify-center">
-          <PaginationControls currentPage={page} setCurrentPage={setPage} />
+          <PaginationControls />
         </div>
 
         {/* Modals */}
@@ -140,7 +146,7 @@ const Dashboard = () => {
           <ConfirmModal
             message="Are you sure you want to delete this task?"
             onConfirm={handleConfirmDelete}
-            onCancel={handleCancelDelete}
+            onCancel={() => setShowConfirm(false)}
           />
         )}
       </div>
