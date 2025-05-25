@@ -16,25 +16,47 @@ const getAllTasks = async (req, res, next) => {
       return next(new AppError("Unauthorized: User not authenticated", 401));
     }
 
-    // Extract pagination params
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    // Filters from query
+    const {
+      page = 1,
+      limit = 10,
+      search = "",
+      status,
+      priority,
+      sort = "desc",
+    } = req.query;
+
     const skip = (page - 1) * limit;
 
+    // Build dynamic filter query
+    const query = { userId };
+
+    if (search) {
+      query.title = { $regex: search, $options: "i" }; // Case-insensitive
+    }
+
+    if (status) {
+      query.status = status; // "Completed" or "Incomplete"
+    }
+
+    if (priority) {
+      query.priority = priority; // "High", "Medium", "Low"
+    }
+
     // Get total count for pagination
-    const totalTasks = await taskModel.countDocuments({ userId });
+    const totalTasks = await taskModel.countDocuments(query);
 
     // Fetch paginated tasks
     const tasks = await taskModel
-      .find({ userId })
+      .find(query)
       .skip(skip)
-      .limit(limit)
-      .sort({ createdAt: -1 });
+      .limit(Number(limit))
+      .sort({ createdAt: sort === "asc" ? 1 : -1 });
 
     res.status(200).json({
       success: true,
       totalTasks,
-      currentPage: page,
+      currentPage: Number(page),
       totalPages: Math.ceil(totalTasks / limit),
       count: tasks.length,
       data: tasks,
