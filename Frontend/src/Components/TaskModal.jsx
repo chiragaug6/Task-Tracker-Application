@@ -55,7 +55,7 @@ export default function TaskModal() {
   };
 
   // Save button handler - validate and dispatch appropriate action
-  const handleSave = () => {
+  const handleSave = async () => {
     const validationErrors = validateTaskForm(formData);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -64,17 +64,21 @@ export default function TaskModal() {
 
     setErrors({}); // Clear previous errors
     setIsLoading(true);
-    console.log(isLoading);
-    console.log("before isloading in model");
 
-    if (editMode) {
-      // Update existing task
-      dispatch(updateTask({ id: currentTask._id, updateData: formData }));
-    } else {
-      // Create new task
-      dispatch(createTask(formData));
+    try {
+      if (editMode) {
+        await dispatch(
+          updateTask({ id: currentTask._id, updateData: formData })
+        ).unwrap();
+      } else {
+        await dispatch(createTask(formData)).unwrap();
+      }
+    } catch (err) {
+      console.error("Failed to save task:", err);
+      // You can set error state here for UI feedback
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   // Don't render modal if not open

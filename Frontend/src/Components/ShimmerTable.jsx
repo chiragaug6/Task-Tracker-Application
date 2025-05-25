@@ -13,7 +13,7 @@ const ShimmerTable = () => {
           </tr>
         </thead>
         <tbody>
-          {Array.from({ length: 5 }).map((_, index) => (
+          {Array.from({ length: 6 }).map((_, index) => (
             <tr key={index} className="hover:bg-base-200 transition-all">
               <td>
                 <div className="h-4 w-32 bg-base-300 rounded"></div>
