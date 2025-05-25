@@ -17,9 +17,23 @@ export const createTask = createAsyncThunk("task/create", async (taskData) => {
 // GET All Tasks
 export const getAllTasks = createAsyncThunk(
   "task/getAll",
-  async ({ page = 1, limit = 5 }) => {
+  async ({
+    page = 1,
+    limit = 5,
+    search = "",
+    status = "",
+    priority = "",
+    sort = "desc",
+  }) => {
     try {
-      const res = await axiosInstance.get(`/tasks?page=${page}&limit=${limit}`);
+      const queryParams = new URLSearchParams();
+      queryParams.append("page", page);
+      queryParams.append("limit", limit);
+      if (search) queryParams.append("search", search);
+      if (status) queryParams.append("status", status);
+      if (priority) queryParams.append("priority", priority);
+      if (sort) queryParams.append("sort", sort);
+      const res = await axiosInstance.get(`/tasks?${queryParams.toString()}`);
       return res?.data;
     } catch (err) {
       toast.error(err?.response?.data?.message || "Failed to fetch tasks");

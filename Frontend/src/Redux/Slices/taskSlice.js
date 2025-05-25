@@ -9,7 +9,6 @@ import {
 // Initial state for the task slice
 const initialState = {
   tasks: [], // All tasks data
-  currentPage: 1, // Pagination: current page
   totalPages: 1, // Pagination: total pages
 
   loading: false, // Loading state for async actions
@@ -48,7 +47,6 @@ const taskSlice = createSlice({
         state.loading = false;
         state.tasks = action.payload.data;
         state.totalPages = action.payload.totalPages;
-        state.currentPage = action.payload.currentPage;
       })
       .addCase(getAllTasks.rejected, (state, action) => {
         state.loading = false;
