@@ -22,17 +22,17 @@ const Dashboard = () => {
 
   const [page, setPage] = useState(1);
 
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [taskToDelete, setTaskToDelete] = useState(null);
+
   // useEffect checks auth and fetches tasks
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/"); // redirect if not logged in
       return;
     }
-    dispatch(getAllTasks({ page, limit: 5 }));
+    dispatch(getAllTasks({ page, limit: 6 }));
   }, [isLoggedIn, page]);
-
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [taskToDelete, setTaskToDelete] = useState(null);
 
   const handleConfirmDelete = async () => {
     if (!taskToDelete) return;
@@ -73,7 +73,7 @@ const Dashboard = () => {
           </button>
         </div>
 
-        {/* Table or Loader */}
+        {/* Table or ShimmerTable */}
         {loading ? (
           <ShimmerTable />
         ) : tasks?.length === 0 ? (
@@ -131,11 +131,7 @@ const Dashboard = () => {
 
         {/* Pagination */}
         <div className="mt-8 flex justify-center">
-          <PaginationControls
-            totalPages={totalPages}
-            currentPage={page}
-            setCurrentPage={setPage}
-          />
+          <PaginationControls currentPage={page} setCurrentPage={setPage} />
         </div>
 
         {/* Modals */}

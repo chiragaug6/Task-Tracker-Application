@@ -1,18 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../Redux/Thunks/authThunks.js";
+import ConfirmModal from "./ConfirmModal.jsx";
 
 const Header = () => {
   const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  async function handleLogout(e) {
-    e.preventDefault();
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const handleConfirmLogout = async () => {
     const res = await dispatch(logout());
     if (res?.payload?.success) navigate("/");
-  }
+  };
 
   return (
     <header className="bg-base-200 shadow sticky top-0 z-50">
@@ -45,7 +47,7 @@ const Header = () => {
               </>
             ) : (
               <button
-                onClick={handleLogout}
+                onClick={() => setShowConfirm(true)}
                 className="btn btn-sm btn-error text-white hover:bg-error-focus transition"
               >
                 Logout
@@ -54,6 +56,13 @@ const Header = () => {
           </div>
         </nav>
       </div>
+      {showConfirm && (
+        <ConfirmModal
+          message="Are you sure you want to Logout??"
+          onConfirm={handleConfirmLogout}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
     </header>
   );
 };
