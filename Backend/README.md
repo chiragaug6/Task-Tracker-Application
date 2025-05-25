@@ -14,6 +14,7 @@ This is the **backend** for the **Task Tracker Application**, built using **Node
 ## ✨ Features
 
 - 🔐 Secure User Authentication with JWT (stored in HTTP-only cookies)
+- 🛡️ **Rate Limiting** added using `express-rate-limit` to prevent brute-force login attacks
 - ✅ Task Management (Create, Read, Update, Delete)
 - 📄 Paginated Task Retrieval
 - 🧼 Input Validation with Joi
@@ -33,9 +34,10 @@ This is the **backend** for the **Task Tracker Application**, built using **Node
 | Framework       | Express.js                   |
 | Database        | MongoDB + Mongoose ORM       |
 | Auth            | JWT, bcryptjs, cookie-parser |
+| Security        | express-rate-limit           |
 | Validation      | Joi, validator               |
 | Env Management  | dotenv                       |
-| Deployment Tool | render                       |
+| Deployment Tool | Render                       |
 
 ---
 

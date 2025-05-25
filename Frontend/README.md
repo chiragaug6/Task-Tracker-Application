@@ -14,6 +14,8 @@ This is the **frontend** of the **Task Tracker Application**, built with **React
 
 - 🔐 User Authentication (Register, Login, Logout)
 - ✅ Task CRUD (Create, Read, Update, Delete)
+- 🔍 **Dynamic Search with Debounce** (optimizes performance during task search)
+- 🗂️ **Task Filtering and Sorting** (by priority, status, date, etc.)
 - 📄 Pagination on task listing
 - 🧠 Centralized state with Redux Toolkit
 - 🌈 UI components via Tailwind CSS & DaisyUI

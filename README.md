@@ -19,6 +19,7 @@
 | Frontend   | React, Redux Toolkit, Tailwind CSS, DaisyUI |
 | Backend    | Node.js, Express.js, MongoDB, Mongoose      |
 | Auth       | JWT, HTTP-only Cookies, bcryptjs            |
+| Security   | express-rate-limit (rate limiting)          |
 | Deployment | Vercel (frontend), Render (backend)         |
 
 ---
@@ -27,6 +28,10 @@
 
 - 🔐 User Registration and Login
 - ✅ Task CRUD Operations
+- 🔎 **Dynamic Search with Debounce**
+- 🎛️ **Filter by Status & Priority**
+- ↕️ **Sort Tasks by Creation Date**
+- 🛡️ **Login Rate Limiting** to prevent brute-force attacks
 - 📄 Pagination for Task Listing
 - 🍞 Toast Notifications
 - 🧼 Input Validation
@@ -40,5 +45,3 @@
 **Chirag Solanki**  
 🔗 [LinkedIn](https://linkedin.com/in/chiragaug6)  
 📧 chiragsolanki.me@gmail.com
-
----
