@@ -61,8 +61,8 @@ const TaskFilters = () => {
         value={sort}
         onChange={(e) => dispatch(setSort(e.target.value))}
       >
-        <option value="desc">📅 Newest First</option>
-        <option value="asc">📆 Oldest First</option>
+        <option value="desc"> Newest First</option>
+        <option value="asc"> Oldest First</option>
       </select>
 
       {/* Reset Button */}
