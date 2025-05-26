@@ -5,7 +5,7 @@ import { logout } from "../Redux/Thunks/authThunks.js";
 import ConfirmModal from "./ConfirmModal.jsx";
 
 const Header = () => {
-  const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
+  const { isLoggedIn, LoggedInUser } = useSelector((state) => state?.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -29,7 +29,14 @@ const Header = () => {
           </Link>
 
           {/* Navigation Buttons */}
-          <div className="mt-2 sm:mt-0 flex gap-3">
+          <div className="flex items-center gap-6">
+            {isLoggedIn && (
+              <h2 className="text-base font-medium text-gray-500">
+                Hello,{" "}
+                <span className="font-semibold">{LoggedInUser?.name}</span>
+              </h2>
+            )}
+
             {!isLoggedIn ? (
               <>
                 <Link
@@ -56,9 +63,10 @@ const Header = () => {
           </div>
         </nav>
       </div>
+
       {showConfirm && (
         <ConfirmModal
-          message="Are you sure you want to Logout??"
+          message="Are you sure you want to Logout?"
           onConfirm={handleConfirmLogout}
           onCancel={() => setShowConfirm(false)}
         />

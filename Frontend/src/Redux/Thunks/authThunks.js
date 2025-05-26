@@ -40,3 +40,14 @@ export const logout = createAsyncThunk("/user/logout", async () => {
     throw error;
   }
 });
+
+// Thunk to get currently logged-in user
+export const getMe = createAsyncThunk("/user/me", async () => {
+  try {
+    const res = await axiosInstance.get("/user/me");
+    console.log(res);
+    return res?.data;
+  } catch (error) {
+    throw error;
+  }
+});
