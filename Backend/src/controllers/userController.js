@@ -103,4 +103,27 @@ const logout = (req, res) => {
   });
 };
 
-export { register, login, logout };
+// @desc    Return current logged-in user info
+// @route   GET /me
+// @access  Private (requires isLoggedIn middleware)
+const getMe = async (req, res, next) => {
+  try {
+    // userId was set in isLoggedIn middleware
+    const user = await userModel.findById(req.userId).select("-password");
+
+    if (!user) {
+      return next(new AppError("User not found", 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User is LoggedIn",
+      isLoggedIn: true,
+      user,
+    });
+  } catch (error) {
+    next(new AppError("Something went wrong while fetching user", 500));
+  }
+};
+
+export { register, login, logout, getMe };
