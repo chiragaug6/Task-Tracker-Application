@@ -17,7 +17,13 @@ function App() {
     dispatch(getMe());
   }, [dispatch]);
 
-  if (loading) return <h2>Checking authentication...</h2>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <span className="loading loading-bars loading-xl"></span>
+      </div>
+    );
+  }
 
   return (
     <Routes>
