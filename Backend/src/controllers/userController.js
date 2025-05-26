@@ -91,9 +91,8 @@ const login = async (req, res, next) => {
 const logout = (req, res) => {
   // Clear authentication token by setting cookie to null
   res.cookie("token", null, {
-    secure: true,
+    ...cookieOptions,
     maxAge: 0,
-    httpOnly: true,
   });
 
   // Send logout success response
